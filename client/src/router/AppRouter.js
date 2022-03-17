@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import NavbarComp from '../components/NavbarComp';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
@@ -9,6 +10,16 @@ import Register from '../pages/Register';
 import UpdateBlog from '../pages/UpdateBlog';
 
 const AppRouter = () => {
+  const { isAuthenticated } = useSelector(state => state.user);
+  console.log(isAuthenticated);
+
+  function RequireAuth({ children, redirectTo }) {
+    if (!isAuthenticated) {
+      return <Navigate to={redirectTo} />;
+    }
+    return children;
+  }
+
   return (
     <Router>
       <NavbarComp />
@@ -16,9 +27,30 @@ const AppRouter = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/detail/:id' element={<PostDetails />} />
-        <Route path='/update/:id' element={<UpdateBlog />} />
-        <Route path='/new' element={<NewBlog />} />
+        <Route
+          path='/detail/:id'
+          element={
+            <RequireAuth redirectTo='/login'>
+              <PostDetails />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/update/:id'
+          element={
+            <RequireAuth redirectTo='/login'>
+              <UpdateBlog />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/new'
+          element={
+            <RequireAuth redirectTo='/login'>
+              <NewBlog />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </Router>
   );
