@@ -2,8 +2,10 @@ import { Avatar, Button, CircularProgress, Container, Grid, Link, TextField, Typ
 import { Formik } from 'formik';
 import React, { useState } from 'react';
 import { MdLockOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { register } from '../redux/actions/userAction';
 
 //! Yup --> validation olarak kullanılıyor
 //! Bu şemayı Formik içerisine validationShema olarak atıyoruz.
@@ -34,16 +36,15 @@ function Login() {
     password: '',
     password2: ''
   };
-
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const handleSubmit = (values, { resetForm }) => {
-    console.log(values);
-
+    // console.log(values);
+    dispatch(register(values));
     resetForm();
-    // navigate('/');
+    navigate('/');
   };
 
   return (

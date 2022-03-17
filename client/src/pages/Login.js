@@ -3,8 +3,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
 import { MdLockOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { login } from '../redux/actions/userAction';
 
 //! Yup --> validation olarak kullanılıyor
 //! Bu şemayı Formik içerisine validationShema olarak atıyoruz.
@@ -29,11 +31,13 @@ function Login() {
   };
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values, { resetForm }) => {
-    console.log(values);
+    // console.log(values);
+    dispatch(login(values));
     resetForm();
-    // navigate('/');
+    navigate('/');
   };
 
   return (

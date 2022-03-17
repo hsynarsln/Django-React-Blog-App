@@ -1,18 +1,15 @@
 import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { logout } from '../redux/actions/userAction';
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [auth, setAuth] = useState(true);
-  const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    displayName: ''
-  });
-
-  useEffect(() => {}, []);
+  const dispatch = useDispatch();
+  const { user, loading, isAuthenticated } = useSelector(state => state.user);
 
   const handleOpenUserMenu = event => {
     setAnchorElUser(event.currentTarget);
@@ -21,12 +18,6 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const logout = () => {};
 
   return (
     <AppBar position='fixed' sx={{ bgcolor: grey[800] }}>
@@ -42,16 +33,16 @@ const Navbar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {user?.displayName ? (
+              {user?.first_name ? (
                 <Typography variant='body1' sx={{ color: 'white', display: 'block' }} style={{ fontFamily: 'Architects Daughter' }}>
-                  {user?.displayName.split(' ')[0].toUpperCase()}
+                  {user?.first_name.split(' ')[0].toUpperCase()}
                 </Typography>
               ) : (
                 ''
               )}
               <Tooltip title='Open settings'>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {user ? <Avatar alt={user.displayName?.toUpperCase()} src={'/static/images/avatar/2.jpg'} sx={{ bgcolor: blue[500] }} /> : <Avatar alt='Remy Sharp' />}
+                  {user ? <Avatar alt={user.first_name?.toUpperCase()} src={'/static/images/avatar/2.jpg'} sx={{ bgcolor: blue[500] }} /> : <Avatar alt='Remy Sharp' />}
                 </IconButton>
               </Tooltip>
             </div>
@@ -71,10 +62,10 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {user?.displayName ? (
+              {isAuthenticated ? (
                 <div>
                   <MenuItem onClick={() => navigate('/new')}>New</MenuItem>
-                  <MenuItem onClick={() => logout()}>Logout</MenuItem>
+                  <MenuItem onClick={() => dispatch(logout())}>Logout</MenuItem>
                 </div>
               ) : (
                 <div>
