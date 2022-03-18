@@ -9,7 +9,7 @@ const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, loading, isAuthenticated } = useSelector(state => state.user);
+  const { user, isAuthenticated } = useSelector(state => state.user);
 
   const handleOpenUserMenu = event => {
     setAnchorElUser(event.currentTarget);
