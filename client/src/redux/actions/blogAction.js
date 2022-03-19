@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CLEAR_ERRORS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_ERRORS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
 
 //! LOAD BLOGS
 export const loadBlogs = () => async dispatch => {
@@ -30,6 +30,52 @@ export const loadAnotherPageBlogs = url => async dispatch => {
     dispatch({ type: GET_MORE_BLOGS_FAIL, payload: error.response });
   }
 };
+
+//! LOAD BLOG DETAILS
+export const loadBlogDetails = id => async dispatch => {
+  try {
+    dispatch({ type: BLOG_DETAILS_REQUEST });
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const data = await fetch(`https://hsynarslan.pythonanywhere.com/blog/${id}/`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    }).then(res => res.json());
+    // console.log(data);
+
+    dispatch({ type: BLOG_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    console.log(error.response);
+    dispatch({ type: BLOG_DETAILS_FAIL, payload: error.response });
+  }
+};
+
+//! ADD COMMENT
+export const addCommentAPI =
+  ({ id, content }) =>
+  async dispatch => {
+    try {
+      dispatch({ type: ADD_COMMENT_REQUEST });
+      const token = JSON.parse(localStorage.getItem('token'));
+
+      const data = await axios.post(
+        `https://hsynarslan.pythonanywhere.com/blog/${id}/comment/`,
+        { post: id, content: content },
+        {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
+      );
+      console.log(data);
+
+      dispatch({ type: ADD_COMMENT_SUCCESS, payload: data.data.message });
+    } catch (error) {
+      console.log(error.response);
+      dispatch({ type: ADD_COMMENT_FAIL, payload: error.response });
+    }
+  };
 
 //! Clearing Errors
 export const clearErrors = () => async dispatch => {

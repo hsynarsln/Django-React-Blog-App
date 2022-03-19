@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import blogReducer from './blogReducer';
+import addCommentReducer, { blogDetailReducer, blogsReducer } from './blogReducer';
 import userReducer from './userReducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
-  blogs: blogReducer
+  blogs: blogsReducer,
+  blogDetail: blogDetailReducer,
+  comment: addCommentReducer
 });
 
 export default rootReducer;
