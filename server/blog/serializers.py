@@ -93,3 +93,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_author(self, obj):
         return obj.user.first_name + ' ' + obj.user.last_name
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        if 'user' in validated_data:
+            user = validated_data['user']
+        return Post.objects.create(user=user, **validated_data)

@@ -4,24 +4,27 @@ import React from 'react';
 import { BiLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { MdComment } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 const BlogCard = ({ data }) => {
+  const navigate = useNavigate();
+
   return (
-    <Card sx={{ maxWidth: 375 }}>
+    <Card sx={{ maxWidth: 375 }} onClick={() => navigate(`/detail/${data.id}`)}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: grey[900] }} aria-label='recipe'>
             {data.author[0].toUpperCase() || 'A'}
           </Avatar>
         }
-        title={data.title.length > 15 ? data.title.substring(0, 15) + '...' : data.title}
+        title={data.title.length > 30 ? data.title.substring(0, 30) + '...' : data.title}
         subheader={
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Typography variant='body2' color='text.secondary'>
               {data.category}
             </Typography>
             <Typography variant='body2' color='text.secondary'>
-              {data.days_since_creation} days ago
+              {data.days_since_creation > 0 ? data.days_since_creation + ' days ago' : 'today'}
             </Typography>
           </div>
         }

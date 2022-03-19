@@ -16,7 +16,7 @@ export const login = (values, navigate) => async dispatch => {
         }
       }
     );
-    console.log(data);
+    // console.log(data);
 
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
     localStorage.setItem('token', JSON.stringify(data.key));
@@ -41,7 +41,7 @@ export const register = (userData, navigate) => async dispatch => {
         }
       }
     );
-    console.log(data);
+    // console.log(data);
 
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data });
     localStorage.setItem('token', JSON.stringify(data.token));
@@ -61,7 +61,8 @@ export const loadUser = () => async dispatch => {
       Authorization: `Token ${token}`
     }
   }).then(res => res.json());
-  console.log(data);
+  // console.log(data);
+
   if (token) {
     dispatch({ type: LOAD_USER_SUCCESS, payload: data });
   } else {

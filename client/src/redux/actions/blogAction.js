@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CLEAR_ERRORS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS } from '../constants/blogConstants';
+import { CLEAR_ERRORS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
 
 //! LOAD BLOGS
 export const loadBlogs = () => async dispatch => {
@@ -7,12 +7,27 @@ export const loadBlogs = () => async dispatch => {
     dispatch({ type: GET_BLOGS_REQUEST });
 
     const data = await axios(`https://hsynarslan.pythonanywhere.com/blog/`, { withCredentials: true });
-    console.log(data.data);
+    // console.log(data.data);
 
     dispatch({ type: GET_BLOGS_SUCCESS, payload: data.data });
   } catch (error) {
     console.log(error.response);
     dispatch({ type: GET_BLOGS_FAIL, payload: error.response });
+  }
+};
+
+//! LOAD MORE BLOGS
+export const loadAnotherPageBlogs = url => async dispatch => {
+  try {
+    dispatch({ type: GET_MORE_BLOGS_REQUEST });
+
+    const data = await axios(`${url}`, { withCredentials: true });
+    // console.log(data.data);
+
+    dispatch({ type: GET_MORE_BLOGS_SUCCESS, payload: data.data });
+  } catch (error) {
+    console.log(error.response);
+    dispatch({ type: GET_MORE_BLOGS_FAIL, payload: error.response });
   }
 };
 

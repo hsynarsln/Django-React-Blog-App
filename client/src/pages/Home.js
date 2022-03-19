@@ -1,13 +1,13 @@
-import { Container, Grid, Grow } from '@mui/material';
+import { Button, Container, Grid, Grow } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BlogCard from '../components/BlogCard';
 import Loader from '../components/Loader';
-import { clearErrors, loadBlogs } from '../redux/actions/blogAction';
+import { clearErrors, loadAnotherPageBlogs, loadBlogs } from '../redux/actions/blogAction';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { blogs, loading, error } = useSelector(state => state.blogs);
+  const { blogs, count, next, loading, error } = useSelector(state => state.blogs);
   // console.log(blogs);
 
   useEffect(() => {
@@ -16,6 +16,12 @@ const Home = () => {
     }
     dispatch(loadBlogs());
   }, [dispatch, error]);
+
+  const loadMoreData = () => {
+    if (next !== null) {
+      dispatch(loadAnotherPageBlogs(next));
+    }
+  };
 
   return (
     <Grow in>
@@ -26,7 +32,7 @@ const Home = () => {
               <Loader />
             ) : (
               <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ margin: '5rem auto' }} spacing={2}>
-                {blogs?.results?.map(data => (
+                {blogs?.map(data => (
                   <Grid key={data.id} item xs={12} md={4} sm={6} justifyContent='center'>
                     <BlogCard data={data} />
                   </Grid>
@@ -34,6 +40,9 @@ const Home = () => {
               </Grid>
             )}
           </Grid>
+          <Button disabled={next === null} onClick={loadMoreData} style={{ display: 'flex', margin: '0 auto 2rem auto' }} variant='contained' color='success'>
+            Load More Post
+          </Button>
         </Grid>
       </Container>
     </Grow>

@@ -11,7 +11,7 @@ import UpdateBlog from '../pages/UpdateBlog';
 
 const AppRouter = () => {
   const { isAuthenticated } = useSelector(state => state.user);
-  console.log(isAuthenticated);
+  // console.log(isAuthenticated);
 
   function RequireAuth({ children, redirectTo }) {
     if (!isAuthenticated) {
