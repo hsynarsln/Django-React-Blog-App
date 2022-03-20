@@ -5,15 +5,9 @@ from rest_framework import serializers
 from .models import Comment, Like, Post, PostView
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name')
-
-
 class CommentSerializer(serializers.ModelSerializer):
     days_since_creation = serializers.SerializerMethodField()
-    user = UserSerializer(write_only=True, required=False)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     author = serializers.SerializerMethodField()
 
     class Meta:
@@ -35,7 +29,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Like
@@ -49,7 +43,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class PostViewSerializer(serializers.ModelSerializer):
-    user = UserSerializer(write_only=True, required=False)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = PostView
@@ -71,7 +65,7 @@ class PostSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     views = PostViewSerializer(many=True, write_only=True, required=False)
     view_count = serializers.SerializerMethodField()
-    user = UserSerializer(write_only=True, required=False)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     author = serializers.SerializerMethodField()
 
     class Meta:

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_ERRORS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
+import { successNote } from '../../helpers/toastNotify';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
 
 //! LOAD BLOGS
 export const loadBlogs = () => async dispatch => {
@@ -51,6 +52,11 @@ export const loadBlogDetails = id => async dispatch => {
   }
 };
 
+//! Clearing Blog Details
+export const clearDetail = () => async dispatch => {
+  dispatch({ type: CLEAR_BLOG_DETAILS });
+};
+
 //! ADD COMMENT
 export const addCommentAPI =
   ({ id, content }) =>
@@ -76,6 +82,28 @@ export const addCommentAPI =
       dispatch({ type: ADD_COMMENT_FAIL, payload: error.response });
     }
   };
+
+//! DELETE POST
+export const deleteBlogAPI = (id, navigate) => async dispatch => {
+  try {
+    dispatch({ type: DELETE_BLOG_REQUEST });
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const data = await axios.delete(`https://hsynarslan.pythonanywhere.com/blog/${id}/`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    });
+    // console.log(data);
+
+    dispatch({ type: DELETE_BLOG_SUCCESS, payload: data.data.message });
+    successNote(data.data.message);
+    navigate('/');
+  } catch (error) {
+    console.log(error.response);
+    dispatch({ type: DELETE_BLOG_FAIL, payload: error.response });
+  }
+};
 
 //! Clearing Errors
 export const clearErrors = () => async dispatch => {

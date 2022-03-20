@@ -1,19 +1,20 @@
-import { Button, Container, Grid, Grow } from '@mui/material';
+import { Button, CircularProgress, Container, Grid, Grow } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BlogCard from '../components/BlogCard';
 import Loader from '../components/Loader';
-import { clearErrors, loadAnotherPageBlogs, loadBlogs } from '../redux/actions/blogAction';
+import { clearDetail, clearErrors, loadAnotherPageBlogs, loadBlogs } from '../redux/actions/blogAction';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { blogs, count, next, loading, error } = useSelector(state => state.blogs);
+  const { blogs, count, next, loading, error, moreLoading } = useSelector(state => state.blogs);
   // console.log(blogs);
 
   useEffect(() => {
     if (error) {
       dispatch(clearErrors());
     }
+    dispatch(clearDetail());
     dispatch(loadBlogs());
   }, [dispatch, error]);
 
@@ -40,9 +41,13 @@ const Home = () => {
               </Grid>
             )}
           </Grid>
-          <Button disabled={next === null} onClick={loadMoreData} style={{ display: 'flex', margin: '0 auto 2rem auto' }} variant='contained' color='success'>
-            Load More Post
-          </Button>
+          {moreLoading ? (
+            <CircularProgress style={{ display: 'flex', margin: '0 auto 2rem auto' }} color='inherit' />
+          ) : (
+            <Button disabled={next === null} onClick={loadMoreData} style={{ display: 'flex', margin: '0 auto 2rem auto' }} variant='contained' color='success'>
+              Load More Post
+            </Button>
+          )}
         </Grid>
       </Container>
     </Grow>

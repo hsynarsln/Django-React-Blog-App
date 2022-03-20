@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import { loadUser } from './redux/actions/userAction';
 import AppRouter from './router/AppRouter';
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <div>
       <AppRouter />
+      <ToastContainer />
     </div>
   );
 }

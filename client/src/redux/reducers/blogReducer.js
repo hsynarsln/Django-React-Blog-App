@@ -1,4 +1,4 @@
-import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_RESET, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_ERRORS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_RESET, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
 
 const initialState = {
   blogs: [],
@@ -14,7 +14,7 @@ export const blogsReducer = (state = initialState.blogs, { type, payload }) => {
     case GET_MORE_BLOGS_REQUEST:
       return {
         ...state,
-        loading: true
+        moreLoading: true
       };
     case GET_BLOGS_SUCCESS:
       return {
@@ -27,7 +27,7 @@ export const blogsReducer = (state = initialState.blogs, { type, payload }) => {
     case GET_MORE_BLOGS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        moreLoading: false,
         next: payload.next,
         blogs: [...state.blogs, ...payload.results]
       };
@@ -35,6 +35,7 @@ export const blogsReducer = (state = initialState.blogs, { type, payload }) => {
     case GET_MORE_BLOGS_FAIL:
       return {
         loading: false,
+        moreLoading: false,
         blogs: null,
         error: payload
       };
@@ -64,6 +65,10 @@ export const blogDetailReducer = (state = initialState.blog, { type, payload }) 
       return {
         loading: false,
         error: payload
+      };
+    case CLEAR_BLOG_DETAILS:
+      return {
+        state: null
       };
     case CLEAR_ERRORS:
       return {
@@ -104,4 +109,31 @@ export const addCommentReducer = (state = {}, { type, payload }) => {
   }
 };
 
-export default addCommentReducer;
+export const blogReducer = (state = {}, { type, payload }) => {
+  switch (type) {
+    case DELETE_BLOG_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case DELETE_BLOG_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        message: payload
+      };
+    case DELETE_BLOG_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null
+      };
+    default:
+      return state;
+  }
+};
