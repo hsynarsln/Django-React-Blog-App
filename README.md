@@ -48,6 +48,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com)
 ```bash
 # Clone this repository
 $ git clone https://github.com/hsynarsln/Django-React-Blog-App.git
+$ cd server/
 
 # Install dependencies
     $ python -m venv env
@@ -62,6 +63,7 @@ $ python manage.py runserver
 ```bash
 # Clone this repository
 $ git clone https://github.com/hsynarsln/Django-React-Blog-App.git
+$ cd client/
 
 # Install dependencies
     > npm install
