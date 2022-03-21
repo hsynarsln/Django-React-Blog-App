@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     border: '1px solid #474c58',
     borderRadius: 35,
     '&:hover': {
-      boxShadow: '4px 3px 11px 6px rgb(200 152 44)',
+      boxShadow: '4px 3px 11px 6px #c9c9c9',
       transform: 'translateY(-3px)'
     }
   }

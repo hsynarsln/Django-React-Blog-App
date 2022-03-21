@@ -110,7 +110,7 @@ const PostDetails = () => {
                 {blog?.author[0].toUpperCase() || 'A'}
               </Avatar>
             }
-            title={blog?.title}
+            title={blog?.author.toUpperCase() || 'Anonymous'}
             subheader={
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: '#c9c9c9' }}>
                 <Typography variant='body2'>{blog?.category}</Typography>
@@ -120,12 +120,12 @@ const PostDetails = () => {
           />
           <CardMedia component='img' height='300' image={blog?.image} alt={blog?.title} />
           <CardContent>
-            <Typography variant='body2'>{blog?.content}</Typography>
+            <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center' }}>
+              {blog?.title}
+            </Typography>
           </CardContent>
           <CardContent>
-            <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', textAlign: 'right', fontWeight: 'bold' }}>
-              {blog?.author.toUpperCase() || 'Anonymous'}
-            </Typography>
+            <Typography variant='body2'>{blog?.content}</Typography>
           </CardContent>
           <CardActions disableSpacing style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#1c1f26', color: '#c9c9c9' }}>
             <div>
