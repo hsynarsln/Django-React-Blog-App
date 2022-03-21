@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { successNote } from '../../helpers/toastNotify';
-import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS } from '../constants/blogConstants';
+import { errorNote, successNote } from '../../helpers/toastNotify';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_SUCCESS } from '../constants/blogConstants';
 
 //! LOAD BLOGS
 export const loadBlogs = () => async dispatch => {
@@ -74,11 +74,12 @@ export const addCommentAPI =
           }
         }
       );
-      console.log(data);
+      // console.log(data);
 
       dispatch({ type: ADD_COMMENT_SUCCESS, payload: data.data.message });
+      successNote(data.data.message);
     } catch (error) {
-      console.log(error.response);
+      errorNote(error.response.data.message);
       dispatch({ type: ADD_COMMENT_FAIL, payload: error.response });
     }
   };
@@ -100,8 +101,50 @@ export const deleteBlogAPI = (id, navigate) => async dispatch => {
     successNote(data.data.message);
     navigate('/');
   } catch (error) {
-    console.log(error.response);
+    errorNote(error.response.data.message);
     dispatch({ type: DELETE_BLOG_FAIL, payload: error.response });
+  }
+};
+
+//! Increase View Count
+export const increseViewCountAPI = id => async dispatch => {
+  try {
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const data = await axios.post(
+      `https://hsynarslan.pythonanywhere.com/blog/${id}/view/`,
+      { post: id },
+      {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    );
+
+    dispatch({ type: INCREASE_VIEWS_COUNT_SUCCESS, payload: true });
+  } catch (error) {
+    dispatch({ type: INCREASE_VIEWS_COUNT_FAIL, payload: error.response });
+  }
+};
+
+//! Like post
+export const likePostAPI = id => async dispatch => {
+  try {
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const data = await axios.post(
+      `https://hsynarslan.pythonanywhere.com/blog/${id}/like/`,
+      { post: id },
+      {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    );
+
+    dispatch({ type: LIKE_SUCCESS, payload: true });
+  } catch (error) {
+    dispatch({ type: LIKE_FAIL, payload: error.response });
   }
 };
 

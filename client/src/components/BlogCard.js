@@ -1,17 +1,35 @@
 import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React from 'react';
+import { AiFillLike } from 'react-icons/ai';
 import { BiLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { MdComment } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { increseViewCountAPI, likePostAPI } from '../redux/actions/blogAction';
 
 const BlogCard = ({ data }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector(state => state.user);
+
+  const goDetailPageAndIncreasaeViewCount = () => {
+    navigate(`/detail/${data.id}`);
+    dispatch(increseViewCountAPI(data.id));
+  };
+
+  const likeBlog = () => {
+    if (data?.likes.length === 0) {
+      dispatch(likePostAPI(data.id));
+    } else if (!data?.likes.find(like => like.user === (user.id || user.pk))) {
+      dispatch(likePostAPI(data.id));
+    }
+  };
 
   return (
     <Card sx={{ maxWidth: 375 }} className='card'>
-      <div onClick={() => navigate(`/detail/${data.id}`)}>
+      <div onClick={goDetailPageAndIncreasaeViewCount}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: grey[900] }} aria-label='recipe'>
@@ -44,8 +62,8 @@ const BlogCard = ({ data }) => {
       </div>
 
       <CardActions disableSpacing>
-        <IconButton aria-label='add to favorites'>
-          <BiLike />
+        <IconButton aria-label='add to favorites' onClick={likeBlog}>
+          {!data?.likes.find(like => like.user === (user?.id || user?.pk)) ? <BiLike /> : <AiFillLike color='blue' />}
           &nbsp;
           <p style={{ fontSize: '1rem' }}>{data.like_count}</p>
         </IconButton>

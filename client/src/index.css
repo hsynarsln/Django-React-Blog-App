@@ -61,3 +61,28 @@ a {
   box-shadow: 4px 3px 11px 6px rgb(200 152 44);
   transform: translateY(-3px);
 }
+
+.loading {
+  width: 100vw;
+  height: 100vh;
+  background-color: #040714;
+  display: grid;
+  place-items: center;
+  max-width: 100%;
+}
+
+.loading > div {
+  width: 10vmax;
+  height: 10vmax;
+  border-bottom: 5px solid rgba(255, 255, 255, 0.719);
+
+  border-radius: 50%;
+
+  animation: loadingRotate 800ms linear infinite;
+}
+
+@keyframes loadingRotate {
+  to {
+    transform: rotateZ(-360deg);
+  }
+}

@@ -19,7 +19,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return (now() - obj.createdDate).days
 
     def get_author(self, obj):
-        return obj.user.first_name + ' ' + obj.user.last_name
+        return obj.user.username
 
     def create(self, validated_data):
         user = self.context['request'].user
@@ -86,7 +86,7 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.views.count()
 
     def get_author(self, obj):
-        return obj.user.first_name + ' ' + obj.user.last_name
+        return obj.user.username
 
     def create(self, validated_data):
         user = self.context['request'].user

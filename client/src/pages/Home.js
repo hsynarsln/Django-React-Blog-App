@@ -4,19 +4,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import BlogCard from '../components/BlogCard';
 import Loader from '../components/Loader';
 import { clearDetail, clearErrors, loadAnotherPageBlogs, loadBlogs } from '../redux/actions/blogAction';
+import { LIKE_RESET } from '../redux/constants/blogConstants';
 
 const Home = () => {
   const dispatch = useDispatch();
   const { blogs, count, next, loading, error, moreLoading } = useSelector(state => state.blogs);
-  // console.log(blogs);
+  const { isLiked, error: likeError } = useSelector(state => state.like);
 
   useEffect(() => {
     if (error) {
       dispatch(clearErrors());
     }
+    if (likeError) {
+      dispatch(clearErrors());
+    }
+    if (isLiked) {
+      dispatch({ type: LIKE_RESET });
+    }
     dispatch(clearDetail());
     dispatch(loadBlogs());
-  }, [dispatch, error]);
+  }, [dispatch, error, isLiked, likeError]);
 
   const loadMoreData = () => {
     if (next !== null) {

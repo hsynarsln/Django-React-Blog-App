@@ -2,7 +2,7 @@ import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, 
 import { grey } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit, AiFillLike } from 'react-icons/ai';
 import { BiLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { MdComment } from 'react-icons/md';
@@ -10,8 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Comments from '../components/Comments';
 import Loader from '../components/Loader';
-import { addCommentAPI, clearErrors, deleteBlogAPI, loadBlogDetails } from '../redux/actions/blogAction';
-import { ADD_COMMENT_RESET } from '../redux/constants/blogConstants';
+import { addCommentAPI, clearErrors, deleteBlogAPI, likePostAPI, loadBlogDetails } from '../redux/actions/blogAction';
+import { ADD_COMMENT_RESET, INCREASE_VIEWS_COUNT_RESET, LIKE_RESET } from '../redux/constants/blogConstants';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,10 +47,11 @@ const PostDetails = () => {
   });
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { blog, loading, error } = useSelector(state => state.blogDetail);
+  const { blog, loading, error, viewSuccess } = useSelector(state => state.blogDetail);
   const { commentLoading, message, success, commentError } = useSelector(state => state.comment);
   const { user, isAuthenticated } = useSelector(state => state.user);
   const { error: deleteError } = useSelector(state => state.blog);
+  const { isLiked, error: likeError } = useSelector(state => state.like);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,17 +64,34 @@ const PostDetails = () => {
     if (deleteError) {
       dispatch(clearErrors());
     }
+    if (likeError) {
+      dispatch(clearErrors());
+    }
     if (success) {
       dispatch({ type: ADD_COMMENT_RESET });
     }
+    if (viewSuccess) {
+      dispatch({ type: INCREASE_VIEWS_COUNT_RESET });
+    }
+    if (isLiked) {
+      dispatch({ type: LIKE_RESET });
+    }
     dispatch(loadBlogDetails(id));
-  }, [dispatch, id, error, commentError, success, deleteError]);
+  }, [dispatch, id, error, commentError, success, deleteError, viewSuccess, likeError, isLiked]);
 
   const addComment = async e => {
     e.preventDefault();
 
     dispatch(addCommentAPI({ ...comment, id: id, content: comment.content }));
     setComment({ ...comment, content: '' });
+  };
+
+  const likeBlog = () => {
+    if (blog?.likes.length === 0) {
+      dispatch(likePostAPI(blog.id));
+    } else if (!blog?.likes.find(like => like.user === (user.id || user.pk))) {
+      dispatch(likePostAPI(blog.id));
+    }
   };
 
   return (
@@ -113,8 +131,8 @@ const PostDetails = () => {
           </CardContent>
           <CardActions disableSpacing style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <div>
-              <IconButton aria-label='add to favorites'>
-                <BiLike />
+              <IconButton aria-label='add to favorites' onClick={likeBlog}>
+                {!blog?.likes.find(like => like.user === (user.id || user.pk)) ? <BiLike /> : <AiFillLike color='blue' />}
                 &nbsp;
                 <p style={{ fontSize: '1rem' }}>{blog?.like_count}</p>
               </IconButton>
