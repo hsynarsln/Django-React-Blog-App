@@ -4,8 +4,8 @@
 
 <div align="center">
   <h3>
-    <a href="https://{your-demo-link.your-domain}">
-      Demo
+    <a href="https://hsynarslan.pythonanywhere.com/">
+      Server
     </a>
      | 
     <a href="https://{your-url-to-the-solution}">
