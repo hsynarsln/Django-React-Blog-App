@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { addCommentReducer, blogDetailReducer, blogReducer, blogsReducer, likePostReducer } from './blogReducer';
+import { addCommentReducer, blogDetailReducer, blogReducer, blogsReducer, likePostReducer, newBlogReducer } from './blogReducer';
 import userReducer from './userReducer';
 
 const rootReducer = combineReducers({
@@ -8,7 +8,8 @@ const rootReducer = combineReducers({
   blogDetail: blogDetailReducer,
   comment: addCommentReducer,
   blog: blogReducer,
-  like: likePostReducer
+  like: likePostReducer,
+  newBlog: newBlogReducer
 });
 
 export default rootReducer;

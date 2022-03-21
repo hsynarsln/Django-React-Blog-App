@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { errorNote, successNote } from '../../helpers/toastNotify';
-import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_SUCCESS } from '../constants/blogConstants';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_SUCCESS, NEW_BLOG_FAIL, NEW_BLOG_REQUEST, NEW_BLOG_SUCCESS, UPDATE_BLOG_FAIL, UPDATE_BLOG_REQUEST, UPDATE_BLOG_SUCCESS } from '../constants/blogConstants';
 
 //! LOAD BLOGS
 export const loadBlogs = () => async dispatch => {
@@ -145,6 +145,53 @@ export const likePostAPI = id => async dispatch => {
     dispatch({ type: LIKE_SUCCESS, payload: true });
   } catch (error) {
     dispatch({ type: LIKE_FAIL, payload: error.response });
+  }
+};
+
+//! createBlog
+export const createBlog = blogData => async dispatch => {
+  try {
+    dispatch({ type: NEW_BLOG_REQUEST });
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const { data } = await axios.post(
+      `https://hsynarslan.pythonanywhere.com/blog/`,
+      {
+        title: blogData.title,
+        content: blogData.content,
+        image: blogData.image,
+        category: blogData.category
+      },
+      {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    );
+    // console.log(data);
+
+    dispatch({ type: NEW_BLOG_SUCCESS, payload: data.message });
+  } catch (error) {
+    dispatch({ type: NEW_BLOG_FAIL, payload: error.response.data.message });
+  }
+};
+
+//! UPDATE BLOG
+export const updateBlog = blogData => async dispatch => {
+  try {
+    dispatch({ type: UPDATE_BLOG_REQUEST });
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const { data } = await axios.put(`https://hsynarslan.pythonanywhere.com/blog/${blogData.id}/`, blogData, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    });
+    // console.log(data);
+
+    dispatch({ type: UPDATE_BLOG_SUCCESS, payload: data.message });
+  } catch (error) {
+    dispatch({ type: UPDATE_BLOG_FAIL, payload: error.response.data.message });
   }
 };
 

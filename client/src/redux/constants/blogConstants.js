@@ -29,4 +29,12 @@ export const LIKE_SUCCESS = 'LIKE_SUCCESS';
 export const LIKE_FAIL = 'LIKE_FAIL';
 export const LIKE_RESET = 'LIKE_RESET';
 
+export const NEW_BLOG_REQUEST = 'NEW_BLOG_REQUEST';
+export const NEW_BLOG_SUCCESS = 'NEW_BLOG_SUCCESS';
+export const NEW_BLOG_FAIL = 'NEW_BLOG_FAIL';
+
+export const UPDATE_BLOG_REQUEST = 'UPDATE_BLOG_REQUEST';
+export const UPDATE_BLOG_SUCCESS = 'UPDATE_BLOG_SUCCESS';
+export const UPDATE_BLOG_FAIL = 'UPDATE_BLOG_FAIL';
+
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
