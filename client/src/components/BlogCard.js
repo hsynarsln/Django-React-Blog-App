@@ -8,6 +8,7 @@ import { MdComment } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearErrors, increseViewCountAPI, likePostAPI } from '../redux/actions/blogAction';
+import { LIKE_RESET } from '../redux/constants/blogConstants';
 
 const BlogCard = ({ data }) => {
   const navigate = useNavigate();
@@ -20,7 +21,10 @@ const BlogCard = ({ data }) => {
     if (likeError) {
       dispatch(clearErrors());
     }
-  }, [dispatch, likeError]);
+    if (isLiked) {
+      dispatch({ type: LIKE_RESET });
+    }
+  }, [dispatch, likeError, isLiked]);
 
   const goDetailPageAndIncreasaeViewCount = () => {
     navigate(`/detail/${data.id}`);

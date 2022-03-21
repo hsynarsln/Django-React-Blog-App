@@ -21,9 +21,10 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center'
   },
   fileInput: {
-    width: '97%',
+    width: '98%',
     margin: '10px 0',
-    backgroundColor: '#ededed'
+    backgroundColor: '#ededed',
+    border: '1px solid #bfbfbf'
   },
   buttonSubmit: {
     marginTop: 10,
