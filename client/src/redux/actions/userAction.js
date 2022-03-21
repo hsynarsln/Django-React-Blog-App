@@ -8,7 +8,7 @@ export const login = (values, navigate) => async dispatch => {
     dispatch({ type: LOGIN_REQUEST });
 
     const { data } = await axios.post(
-      `https://hsynarslan.pythonanywhere.com/users/auth/login/`,
+      `${process.env.REACT_APP_BACKEND_URL}users/auth/login/`,
       values,
       { withCredentials: true },
       {
@@ -35,7 +35,7 @@ export const register = (userData, navigate) => async dispatch => {
     dispatch({ type: REGISTER_USER_REQUEST });
 
     const { data } = await axios.post(
-      `https://hsynarslan.pythonanywhere.com/users/auth/register/`,
+      `${process.env.REACT_APP_BACKEND_URL}users/auth/register/`,
       userData,
       { withCredentials: true },
       {
@@ -60,7 +60,7 @@ export const register = (userData, navigate) => async dispatch => {
 export const loadUser = token => async dispatch => {
   dispatch({ type: LOAD_USER_REQUEST });
 
-  const data = await fetch(`https://hsynarslan.pythonanywhere.com/users/auth/user/`, {
+  const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}users/auth/user/`, {
     headers: {
       Authorization: `Token ${token}`
     }
@@ -77,7 +77,7 @@ export const loadUser = token => async dispatch => {
 //! LOGOUT
 export const logout = () => async dispatch => {
   try {
-    const { data } = await axios.post(`https://hsynarslan.pythonanywhere.com/users/auth/logout/`, { withCredentials: true });
+    const { data } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}users/auth/logout/`, { withCredentials: true });
     // console.log(data);
 
     dispatch({ type: LOGOUT_SUCCESS, payload: data.detail });

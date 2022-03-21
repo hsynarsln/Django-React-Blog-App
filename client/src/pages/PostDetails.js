@@ -20,13 +20,17 @@ const useStyles = makeStyles(theme => ({
     }
   },
   paper: {
-    padding: 10
+    padding: 10,
+    backgroundColor: '#fff'
   },
   form: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'center'
+  },
+  inputField: {
+    backgroundColor: '#c9c9c9'
   },
   buttonSubmit: {
     marginTop: 5,
@@ -99,52 +103,46 @@ const PostDetails = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Card sx={{ maxWidth: 750 }} style={{ display: 'flex', flexDirection: 'column', margin: '5rem auto 1rem auto' }}>
+        <Card sx={{ maxWidth: 750 }} style={{ display: 'flex', flexDirection: 'column', margin: '5rem auto 1rem auto', backgroundColor: '#1c1f26', color: '#c9c9c9' }}>
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: grey[900] }} aria-label='recipe'>
+              <Avatar sx={{ bgcolor: grey[200], color: '#000' }} aria-label='recipe'>
                 {blog?.author[0].toUpperCase() || 'A'}
               </Avatar>
             }
             title={blog?.title}
             subheader={
-              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Typography variant='body2' color='text.secondary'>
-                  {blog?.category}
-                </Typography>
-                <Typography variant='body2' color='text.secondary'>
-                  {blog?.days_since_creation > 0 ? blog?.days_since_creation + ' days ago' : 'today'}
-                </Typography>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: '#c9c9c9' }}>
+                <Typography variant='body2'>{blog?.category}</Typography>
+                <Typography variant='body2'>{blog?.days_since_creation > 0 ? blog?.days_since_creation + ' days ago' : 'today'}</Typography>
               </div>
             }
           />
           <CardMedia component='img' height='300' image={blog?.image} alt={blog?.title} />
           <CardContent>
-            <Typography variant='body2' color='text.secondary'>
-              {blog?.content}
-            </Typography>
+            <Typography variant='body2'>{blog?.content}</Typography>
           </CardContent>
           <CardContent>
-            <Typography variant='body1' color='text.secondary' style={{ textAlign: 'right', fontWeight: 'bold' }}>
-              {blog?.author || 'Anonymous'}
+            <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', textAlign: 'right', fontWeight: 'bold' }}>
+              {blog?.author.toUpperCase() || 'Anonymous'}
             </Typography>
           </CardContent>
-          <CardActions disableSpacing style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <CardActions disableSpacing style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#1c1f26', color: '#c9c9c9' }}>
             <div>
               <IconButton aria-label='add to favorites' onClick={likeBlog}>
-                {!blog?.likes.find(like => like.user === (user.id || user.pk)) ? <BiLike /> : <AiFillLike color='blue' />}
+                {!blog?.likes.find(like => like.user === (user?.id || user?.pk)) ? <BiLike color='#c9c9c9' /> : <AiFillLike color='red' />}
                 &nbsp;
-                <p style={{ fontSize: '1rem' }}>{blog?.like_count}</p>
+                <p style={{ fontSize: '1rem', color: '#c9c9c9' }}>{blog?.like_count}</p>
               </IconButton>
               <IconButton aria-label='view'>
-                <FaEye />
+                <FaEye color='#c9c9c9' />
                 &nbsp;
-                <p style={{ fontSize: '1rem' }}>{blog?.view_count}</p>
+                <p style={{ fontSize: '1rem', color: '#c9c9c9' }}>{blog?.view_count}</p>
               </IconButton>
               <IconButton aria-label='add to comment'>
-                <MdComment />
+                <MdComment color='#c9c9c9' />
                 &nbsp;
-                <p style={{ fontSize: '1rem' }}>{blog?.comment_count}</p>
+                <p style={{ fontSize: '1rem', color: '#c9c9c9' }}>{blog?.comment_count}</p>
               </IconButton>
             </div>
             {(user?.pk || user?.id) === blog?.user && (
@@ -162,25 +160,25 @@ const PostDetails = () => {
           </CardActions>
           <Paper className={classes.paper}>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={addComment}>
-              <TextField name='content' variant='outlined' label='Comment *' fullWidth value={comment.content} onChange={e => setComment({ ...comment, content: e.target.value })} />
+              <TextField className={classes.inputField} name='content' variant='outlined' label='Comment *' fullWidth value={comment.content} onChange={e => setComment({ ...comment, content: e.target.value })} />
               <Button className={classes.buttonSubmit} sx={{ bgcolor: grey[800] }} variant='contained' size='medium' type='submit'>
                 SEND
               </Button>
             </form>
           </Paper>
-          <Typography style={{ fontFamily: 'Permanent Marker', marginLeft: '30px' }} variant='h6' sx={{ color: '#046582', mt: 2 }}>
+          <Typography style={{ fontFamily: 'Permanent Marker', marginLeft: '30px', textDecoration: 'underline' }} variant='h6' sx={{ color: '#c9c9c9', m: 2 }}>
             COMMENTS
           </Typography>
           {blog?.comments.length === 0 ? (
             <Grid item xs={12} sm={12} md={12}>
-              <Typography style={{ fontFamily: 'Permanent Marker', marginLeft: '30px' }} variant='body2' sx={{ color: '#046582', mt: 2 }}>
+              <Typography style={{ fontFamily: 'Permanent Marker', marginLeft: '30px' }} variant='body2' sx={{ color: '#c9c9c9', m: 2 }}>
                 No comments yet...
               </Typography>
             </Grid>
           ) : (
-            <Grid item xs={12} sm={12} md={12}>
+            <Grid item xs={12} sm={12} md={12} container direction='columnn' justifyContent='center'>
               {blog?.comments.map(comment => (
-                <List key={comment.id} sx={{ width: '100%', maxWidth: 1180, bgcolor: 'background.paper' }}>
+                <List key={comment.id} sx={{ width: '95%', maxWidth: 1180, bgcolor: '#1c1f26' }}>
                   <Comments comment={comment} />
                 </List>
               ))}

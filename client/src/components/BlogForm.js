@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
   fileInput: {
     width: '97%',
-    margin: '10px 0'
+    margin: '10px 0',
+    backgroundColor: '#ededed'
   },
   buttonSubmit: {
     marginTop: 10,
@@ -46,6 +47,7 @@ const BlogForm = ({ blog }) => {
   const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
+  // console.log(blog);
 
   useEffect(() => {
     if (blog) {
@@ -62,22 +64,21 @@ const BlogForm = ({ blog }) => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (blog.id) {
-      dispatch(updateBlog(blogData));
+    if (blog !== undefined) {
+      dispatch(updateBlog(blogData, navigate));
     } else {
-      dispatch(createBlog({ title: blogData.title, content: blogData.content, image: blogData.image, category: blogData.category }));
+      dispatch(createBlog(blogData, navigate));
     }
-    navigate('/');
   };
 
   return (
     <Paper className={classes.paper}>
       <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-        <TextField name='title' variant='outlined' label='Title *' fullWidth value={blogData.title} onChange={e => setBlogData({ ...blogData, title: e.target.value })} />
-        <TextField name='image' variant='outlined' label='Image URL *' fullWidth value={blogData.image} onChange={e => setBlogData({ ...blogData, image: e.target.value })} />
-        <TextField name='content' variant='outlined' label='Content *' fullWidth value={blogData.content} onChange={e => setBlogData({ ...blogData, content: e.target.value })} multiline rows={10} />
-        <Box sx={{ width: '100%', p: 1 }}>
-          <FormControl fullWidth>
+        <TextField className={classes.fileInput} name='title' variant='outlined' label='Title *' fullWidth value={blogData.title} onChange={e => setBlogData({ ...blogData, title: e.target.value })} />
+        <TextField className={classes.fileInput} name='image' variant='outlined' label='Image URL *' fullWidth value={blogData.image} onChange={e => setBlogData({ ...blogData, image: e.target.value })} />
+        <TextField className={classes.fileInput} name='content' variant='outlined' label='Content *' fullWidth value={blogData.content} onChange={e => setBlogData({ ...blogData, content: e.target.value })} multiline rows={10} />
+        <Box sx={{ width: '100%', pl: 1 }}>
+          <FormControl fullWidth className={classes.fileInput}>
             <InputLabel variant='standard' htmlFor='uncontrolled-native'>
               Category
             </InputLabel>

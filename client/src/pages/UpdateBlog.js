@@ -25,7 +25,7 @@ const UpdateBlog = () => {
           <Grid container justifyContent='center'>
             <img src='/images/blog.jpg' alt='new blog' width={500} height={300} />
           </Grid>
-          <Typography style={{ fontFamily: 'Qwitcher Grypen' }} variant='h4' align='center' sx={{ my: 2, color: '#046582' }}>
+          <Typography style={{ fontFamily: 'Qwitcher Grypen' }} variant='h4' align='center' sx={{ my: 2, color: '#c9c9c9' }}>
             <span>
               <span style={{ fontSize: '3rem' }}>U</span>
               PDATE

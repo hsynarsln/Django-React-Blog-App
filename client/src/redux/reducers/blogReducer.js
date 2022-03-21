@@ -1,4 +1,4 @@
-import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_RESET, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_RESET, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_RESET, LIKE_SUCCESS, NEW_BLOG_FAIL, NEW_BLOG_REQUEST, NEW_BLOG_SUCCESS, UPDATE_BLOG_FAIL, UPDATE_BLOG_REQUEST, UPDATE_BLOG_SUCCESS } from '../constants/blogConstants';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_RESET, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_RESET, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_RESET, LIKE_SUCCESS, NEW_BLOG_FAIL, NEW_BLOG_REQUEST, NEW_BLOG_RESET, NEW_BLOG_SUCCESS, UPDATE_BLOG_FAIL, UPDATE_BLOG_REQUEST, UPDATE_BLOG_RESET, UPDATE_BLOG_SUCCESS } from '../constants/blogConstants';
 
 const initialState = {
   blogs: [],
@@ -138,7 +138,8 @@ export const blogReducer = (state = {}, { type, payload }) => {
       return {
         ...state,
         loading: false,
-        message: payload
+        message: payload,
+        success: true
       };
     case DELETE_BLOG_FAIL:
     case UPDATE_BLOG_FAIL:
@@ -146,6 +147,11 @@ export const blogReducer = (state = {}, { type, payload }) => {
         ...state,
         loading: false,
         error: payload
+      };
+    case UPDATE_BLOG_RESET:
+      return {
+        ...state,
+        success: false
       };
     case CLEAR_ERRORS:
       return {
@@ -197,6 +203,11 @@ export const newBlogReducer = (state = {}, { type, payload }) => {
         ...state,
         loading: false,
         error: payload
+      };
+    case NEW_BLOG_RESET:
+      return {
+        ...state,
+        success: false
       };
     case CLEAR_ERRORS:
       return {

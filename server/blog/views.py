@@ -12,7 +12,7 @@ from .serializers import (CommentSerializer, LikeSerializer, PostSerializer,
 
 # Create your views here.
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-createdDate')
     serializer_class = PostSerializer
     pagination_class = Pagination
     permission_classes = (IsAuthenticatedOrReadOnly,)

@@ -7,7 +7,7 @@ export const loadBlogs = () => async dispatch => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
 
-    const data = await axios(`https://hsynarslan.pythonanywhere.com/blog/`, { withCredentials: true });
+    const data = await axios(`${process.env.REACT_APP_BACKEND_URL}blog/`, { withCredentials: true });
     // console.log(data.data);
 
     dispatch({ type: GET_BLOGS_SUCCESS, payload: data.data });
@@ -38,7 +38,7 @@ export const loadBlogDetails = id => async dispatch => {
     dispatch({ type: BLOG_DETAILS_REQUEST });
     const token = JSON.parse(localStorage.getItem('token'));
 
-    const data = await fetch(`https://hsynarslan.pythonanywhere.com/blog/${id}/`, {
+    const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}blog/${id}/`, {
       headers: {
         Authorization: `Token ${token}`
       }
@@ -66,7 +66,7 @@ export const addCommentAPI =
       const token = JSON.parse(localStorage.getItem('token'));
 
       const data = await axios.post(
-        `https://hsynarslan.pythonanywhere.com/blog/${id}/comment/`,
+        `${process.env.REACT_APP_BACKEND_URL}blog/${id}/comment/`,
         { post: id, content: content },
         {
           headers: {
@@ -90,7 +90,7 @@ export const deleteBlogAPI = (id, navigate) => async dispatch => {
     dispatch({ type: DELETE_BLOG_REQUEST });
     const token = JSON.parse(localStorage.getItem('token'));
 
-    const data = await axios.delete(`https://hsynarslan.pythonanywhere.com/blog/${id}/`, {
+    const data = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}blog/${id}/`, {
       headers: {
         Authorization: `Token ${token}`
       }
@@ -112,7 +112,7 @@ export const increseViewCountAPI = id => async dispatch => {
     const token = JSON.parse(localStorage.getItem('token'));
 
     const data = await axios.post(
-      `https://hsynarslan.pythonanywhere.com/blog/${id}/view/`,
+      `${process.env.REACT_APP_BACKEND_URL}blog/${id}/view/`,
       { post: id },
       {
         headers: {
@@ -133,7 +133,7 @@ export const likePostAPI = id => async dispatch => {
     const token = JSON.parse(localStorage.getItem('token'));
 
     const data = await axios.post(
-      `https://hsynarslan.pythonanywhere.com/blog/${id}/like/`,
+      `${process.env.REACT_APP_BACKEND_URL}blog/${id}/like/`,
       { post: id },
       {
         headers: {
@@ -149,13 +149,14 @@ export const likePostAPI = id => async dispatch => {
 };
 
 //! createBlog
-export const createBlog = blogData => async dispatch => {
+export const createBlog = (blogData, navigate) => async dispatch => {
   try {
     dispatch({ type: NEW_BLOG_REQUEST });
     const token = JSON.parse(localStorage.getItem('token'));
+    console.log(blogData);
 
     const { data } = await axios.post(
-      `https://hsynarslan.pythonanywhere.com/blog/`,
+      `${process.env.REACT_APP_BACKEND_URL}blog/`,
       {
         title: blogData.title,
         content: blogData.content,
@@ -171,18 +172,21 @@ export const createBlog = blogData => async dispatch => {
     // console.log(data);
 
     dispatch({ type: NEW_BLOG_SUCCESS, payload: data.message });
+    successNote(data.message);
+    navigate('/');
   } catch (error) {
+    errorNote(error.response.data.message);
     dispatch({ type: NEW_BLOG_FAIL, payload: error.response.data.message });
   }
 };
 
 //! UPDATE BLOG
-export const updateBlog = blogData => async dispatch => {
+export const updateBlog = (blogData, navigate) => async dispatch => {
   try {
     dispatch({ type: UPDATE_BLOG_REQUEST });
     const token = JSON.parse(localStorage.getItem('token'));
 
-    const { data } = await axios.put(`https://hsynarslan.pythonanywhere.com/blog/${blogData.id}/`, blogData, {
+    const { data } = await axios.put(`${process.env.REACT_APP_BACKEND_URL}blog/${blogData.id}/`, blogData, {
       headers: {
         Authorization: `Token ${token}`
       }
@@ -190,7 +194,10 @@ export const updateBlog = blogData => async dispatch => {
     // console.log(data);
 
     dispatch({ type: UPDATE_BLOG_SUCCESS, payload: data.message });
+    successNote(data.message);
+    navigate(`/detail/${blogData.id}`);
   } catch (error) {
+    errorNote(error.response.data.message);
     dispatch({ type: UPDATE_BLOG_FAIL, payload: error.response.data.message });
   }
 };

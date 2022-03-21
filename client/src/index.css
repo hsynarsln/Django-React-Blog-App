@@ -55,6 +55,11 @@ a {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-style: italic;
+}
+
+.card {
+  border-radius: 50px;
 }
 
 .card:hover {
