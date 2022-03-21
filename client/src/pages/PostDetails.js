@@ -103,7 +103,7 @@ const PostDetails = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Card sx={{ maxWidth: 750 }} style={{ display: 'flex', flexDirection: 'column', margin: '5rem auto 1rem auto', backgroundColor: '#1c1f26', color: '#c9c9c9' }}>
+        <Card sx={{ maxWidth: 750 }} style={{ display: 'flex', flexDirection: 'column', margin: '6rem auto 1rem auto', backgroundColor: '#1c1f26', color: '#c9c9c9' }}>
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: grey[200], color: '#000' }} aria-label='recipe'>

@@ -82,7 +82,7 @@ export const logout = () => async dispatch => {
 
     dispatch({ type: LOGOUT_SUCCESS, payload: data.detail });
     localStorage.removeItem('token');
-    successNote('Logout Successful');
+    successNote(data.detail);
   } catch (error) {
     errorNote(error.response.data.non_field_errors[0]);
     dispatch({ type: LOGOUT_FAIL, payload: error.response.data.non_field_errors[0] });

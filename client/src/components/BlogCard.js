@@ -1,5 +1,6 @@
 import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { AiFillLike } from 'react-icons/ai';
 import { BiLike } from 'react-icons/bi';
@@ -10,9 +11,22 @@ import { useNavigate } from 'react-router-dom';
 import { clearErrors, increseViewCountAPI, likePostAPI } from '../redux/actions/blogAction';
 import { LIKE_RESET } from '../redux/constants/blogConstants';
 
+const useStyles = makeStyles(theme => ({
+  card: {
+    backgroundColor: grey[900],
+    border: '1px solid #474c58',
+    borderRadius: 35,
+    '&:hover': {
+      boxShadow: '4px 3px 11px 6px rgb(200 152 44)',
+      transform: 'translateY(-3px)'
+    }
+  }
+}));
+
 const BlogCard = ({ data }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const classes = useStyles();
   const { user, isAuthenticated } = useSelector(state => state.user);
   const { isLiked, error: likeError } = useSelector(state => state.like);
   const [datas, setDatas] = useState(data);
@@ -44,15 +58,15 @@ const BlogCard = ({ data }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 375 }} className='card'>
-      <div onClick={goDetailPageAndIncreasaeViewCount} style={{ backgroundColor: '#1c1f26', color: '#c9c9c9' }}>
+    <Card sx={{ maxWidth: 375 }} className={`${classes.card}`}>
+      <div onClick={goDetailPageAndIncreasaeViewCount} style={{ color: '#c9c9c9' }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: grey[200], color: '#000' }} aria-label='author'>
               {datas.author[0].toUpperCase() || 'A'}
             </Avatar>
           }
-          title={datas.title.length > 30 ? datas.title.substring(0, 30) + '...' : datas.title}
+          title={datas.author.toUpperCase() || 'Anonymous'}
           subheader={
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: '#c9c9c9' }}>
               <Typography variant='body2'>{datas.category}</Typography>
@@ -62,13 +76,13 @@ const BlogCard = ({ data }) => {
           style={{ borderBottom: '1px solid #c9c9c9' }}
         />
         <CardContent>
-          <Typography variant='body2' className='line-clamp'>
-            {datas.content}
+          <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', fontWeight: 'bold' }}>
+            {datas.title.length > 40 ? datas.title.substring(0, 40) + '...' : datas.title}
           </Typography>
         </CardContent>
         <CardContent>
-          <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', textAlign: 'right', fontWeight: 'bold' }}>
-            {datas.author.toUpperCase() || 'Anonymous'}
+          <Typography variant='body2' className='line-clamp'>
+            {datas.content}
           </Typography>
         </CardContent>
         <CardMedia component='img' height='194' image={datas.image} alt={datas.title} />
