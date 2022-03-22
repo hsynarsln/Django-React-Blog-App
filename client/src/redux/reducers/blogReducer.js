@@ -180,8 +180,6 @@ export const likePostReducer = (state = {}, { type, payload }) => {
       };
     case GET_LIKES_SUCCESS:
       return {
-        ...state,
-        isLiked: false,
         likes: payload
       };
     case LIKE_FAIL:
