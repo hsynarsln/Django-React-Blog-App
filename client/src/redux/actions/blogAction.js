@@ -153,7 +153,7 @@ export const createBlog = (blogData, navigate) => async dispatch => {
   try {
     dispatch({ type: NEW_BLOG_REQUEST });
     const token = JSON.parse(localStorage.getItem('token'));
-    console.log(blogData);
+    // console.log(blogData);
 
     const { data } = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}blog/`,
