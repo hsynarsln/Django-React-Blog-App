@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     backgroundColor: grey[900],
     border: '1px solid #474c58',
-    borderRadius: 35,
+    borderRadius: 50,
     '&:hover': {
       boxShadow: '4px 3px 11px 6px #c9c9c9',
       transform: 'translateY(-3px)'
@@ -73,22 +73,20 @@ const BlogCard = ({ data }) => {
               <Typography variant='body2'>{datas.days_since_creation > 0 ? datas.days_since_creation + ' days ago' : 'today'}</Typography>
             </div>
           }
-          style={{ borderBottom: '1px solid #c9c9c9' }}
+          style={{ borderBottom: '1px solid #c9c9c9', padding: '1.5rem' }}
         />
         <CardContent>
-          <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', fontWeight: 'bold' }}>
+          <Typography variant='body1' style={{ fontFamily: 'Permanent Marker', fontWeight: 'bold', marginBottom: '0.6rem' }}>
             {datas.title.length > 40 ? datas.title.substring(0, 40) + '...' : datas.title}
           </Typography>
-        </CardContent>
-        <CardContent>
           <Typography variant='body2' className='line-clamp'>
             {datas.content}
           </Typography>
         </CardContent>
-        <CardMedia component='img' height='194' image={datas.image} alt={datas.title} />
+        <CardMedia component='img' height='150' image={datas.image} alt={datas.title} />
       </div>
 
-      <CardActions disableSpacing style={{ backgroundColor: '#1c1f26', color: '#c9c9c9', display: 'flex', justifyContent: 'space-evenly' }}>
+      <CardActions disableSpacing style={{ backgroundColor: '#1c1f26', color: '#c9c9c9', display: 'flex', justifyContent: 'space-evenly', padding: '0px 4rem' }}>
         <IconButton aria-label='add to favorites' onClick={likeBlog}>
           {!datas?.likes.find(like => like.user === (user?.id || user?.pk)) ? <BiLike color='#c9c9c9' /> : <AiFillLike color='red' />}
           &nbsp;

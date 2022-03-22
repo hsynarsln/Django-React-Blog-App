@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, List, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Grid, IconButton, List, Paper, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Comments from '../components/Comments';
 import Loader from '../components/Loader';
-import { addCommentAPI, clearErrors, deleteBlogAPI, likePostAPI, loadBlogDetails } from '../redux/actions/blogAction';
+import { addCommentAPI, clearErrors, deleteBlogAPI, getCommentAPI, getLikesAPI, likePostAPI, loadBlogDetails } from '../redux/actions/blogAction';
 import { ADD_COMMENT_RESET, INCREASE_VIEWS_COUNT_RESET, LIKE_RESET } from '../redux/constants/blogConstants';
 
 const useStyles = makeStyles(theme => ({
@@ -52,10 +52,10 @@ const PostDetails = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { blog, loading, error, viewSuccess } = useSelector(state => state.blogDetail);
-  const { commentLoading, message, success, commentError } = useSelector(state => state.comment);
+  const { commentLoading, message, success, commentError, comments } = useSelector(state => state.comment);
   const { user, isAuthenticated } = useSelector(state => state.user);
   const { error: deleteError } = useSelector(state => state.blog);
-  const { isLiked, error: likeError } = useSelector(state => state.like);
+  const { isLiked, error: likeError, likes } = useSelector(state => state.like);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -81,6 +81,8 @@ const PostDetails = () => {
       dispatch({ type: LIKE_RESET });
     }
     dispatch(loadBlogDetails(id));
+    dispatch(getCommentAPI(id));
+    dispatch(getLikesAPI(id));
   }, [dispatch, id, error, commentError, success, deleteError, viewSuccess, likeError, isLiked]);
 
   const addComment = async e => {
@@ -91,9 +93,9 @@ const PostDetails = () => {
   };
 
   const likeBlog = () => {
-    if (blog?.likes.length === 0) {
+    if (likes?.length === 0) {
       dispatch(likePostAPI(blog.id));
-    } else if (!blog?.likes.find(like => like.user === (user.id || user.pk))) {
+    } else if (!likes?.find(like => like.user === (user.id || user.pk))) {
       dispatch(likePostAPI(blog.id));
     }
   };
@@ -169,20 +171,26 @@ const PostDetails = () => {
           <Typography style={{ fontFamily: 'Permanent Marker', marginLeft: '30px', textDecoration: 'underline' }} variant='h6' sx={{ color: '#c9c9c9', m: 2 }}>
             COMMENTS
           </Typography>
-          {blog?.comments.length === 0 ? (
+          {comments?.length === 0 ? (
             <Grid item xs={12} sm={12} md={12}>
               <Typography style={{ fontFamily: 'Permanent Marker', marginLeft: '30px' }} variant='body2' sx={{ color: '#c9c9c9', m: 2 }}>
                 No comments yet...
               </Typography>
             </Grid>
           ) : (
-            <Grid item xs={12} sm={12} md={12} container direction='columnn' justifyContent='center'>
-              {blog?.comments.map(comment => (
-                <List key={comment.id} sx={{ width: '95%', maxWidth: 1180, bgcolor: '#1c1f26' }}>
-                  <Comments comment={comment} />
-                </List>
-              ))}
-            </Grid>
+            <>
+              {commentLoading ? (
+                <CircularProgress style={{ display: 'flex', margin: '0 auto 2rem auto' }} color='inherit' />
+              ) : (
+                <Grid item xs={12} sm={12} md={12} container direction='columnn' justifyContent='center'>
+                  {comments?.map(comment => (
+                    <List key={comment.id} sx={{ width: '95%', maxWidth: 1180, bgcolor: '#1c1f26' }}>
+                      <Comments comment={comment} />
+                    </List>
+                  ))}
+                </Grid>
+              )}
+            </>
           )}
         </Card>
       )}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { errorNote, successNote } from '../../helpers/toastNotify';
-import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_SUCCESS, NEW_BLOG_FAIL, NEW_BLOG_REQUEST, NEW_BLOG_SUCCESS, UPDATE_BLOG_FAIL, UPDATE_BLOG_REQUEST, UPDATE_BLOG_SUCCESS } from '../constants/blogConstants';
+import { ADD_COMMENT_FAIL, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, BLOG_DETAILS_FAIL, BLOG_DETAILS_REQUEST, BLOG_DETAILS_SUCCESS, CLEAR_BLOG_DETAILS, CLEAR_ERRORS, DELETE_BLOG_FAIL, DELETE_BLOG_REQUEST, DELETE_BLOG_SUCCESS, GET_BLOGS_FAIL, GET_BLOGS_REQUEST, GET_BLOGS_SUCCESS, GET_COMMENT_FAIL, GET_COMMENT_REQUEST, GET_COMMENT_SUCCESS, GET_LIKES_FAIL, GET_LIKES_SUCCESS, GET_MORE_BLOGS_FAIL, GET_MORE_BLOGS_REQUEST, GET_MORE_BLOGS_SUCCESS, INCREASE_VIEWS_COUNT_FAIL, INCREASE_VIEWS_COUNT_SUCCESS, LIKE_FAIL, LIKE_SUCCESS, NEW_BLOG_FAIL, NEW_BLOG_REQUEST, NEW_BLOG_SUCCESS, UPDATE_BLOG_FAIL, UPDATE_BLOG_REQUEST, UPDATE_BLOG_SUCCESS } from '../constants/blogConstants';
 
 //! LOAD BLOGS
 export const loadBlogs = () => async dispatch => {
@@ -84,6 +84,26 @@ export const addCommentAPI =
     }
   };
 
+//! GET COMMENT
+export const getCommentAPI = id => async dispatch => {
+  try {
+    dispatch({ type: GET_COMMENT_REQUEST });
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const data = await axios(`${process.env.REACT_APP_BACKEND_URL}blog/${id}/comment/`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    });
+    // console.log(data);
+
+    dispatch({ type: GET_COMMENT_SUCCESS, payload: data.data });
+  } catch (error) {
+    errorNote(error.response.data.message);
+    dispatch({ type: GET_COMMENT_FAIL, payload: error.response });
+  }
+};
+
 //! DELETE POST
 export const deleteBlogAPI = (id, navigate) => async dispatch => {
   try {
@@ -145,6 +165,23 @@ export const likePostAPI = id => async dispatch => {
     dispatch({ type: LIKE_SUCCESS, payload: true });
   } catch (error) {
     dispatch({ type: LIKE_FAIL, payload: error.response });
+  }
+};
+
+//! Get Likes
+export const getLikesAPI = id => async dispatch => {
+  try {
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    const data = await axios(`${process.env.REACT_APP_BACKEND_URL}blog/${id}/like/`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    });
+
+    dispatch({ type: GET_LIKES_SUCCESS, payload: data.data });
+  } catch (error) {
+    dispatch({ type: GET_LIKES_FAIL, payload: error.response });
   }
 };
 
