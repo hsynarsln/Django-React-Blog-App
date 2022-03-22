@@ -94,10 +94,13 @@ export const blogDetailReducer = (state = initialState.blog, { type, payload }) 
 export const addCommentReducer = (state = {}, { type, payload }) => {
   switch (type) {
     case ADD_COMMENT_REQUEST:
-    case GET_COMMENT_REQUEST:
       return {
         ...state,
         commentLoading: true
+      };
+    case GET_COMMENT_REQUEST:
+      return {
+        ...state
       };
     case ADD_COMMENT_SUCCESS:
       return {
@@ -108,7 +111,6 @@ export const addCommentReducer = (state = {}, { type, payload }) => {
     case GET_COMMENT_SUCCESS:
       return {
         ...state,
-        commentLoading: false,
         comments: payload
       };
     case ADD_COMMENT_FAIL:
