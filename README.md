@@ -30,7 +30,7 @@
 
 ## Overview
 
-![screenshot](Animation.gif)
+![screenshot](Animation1.gif)
 
 ### Built With
 
