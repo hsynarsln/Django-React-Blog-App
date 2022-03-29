@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, Grid, IconButton, List, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, List, Paper, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
@@ -178,19 +178,13 @@ const PostDetails = () => {
               </Typography>
             </Grid>
           ) : (
-            <>
-              {commentLoading ? (
-                <CircularProgress style={{ display: 'flex', margin: '0 auto 2rem auto' }} color='inherit' />
-              ) : (
-                <Grid item xs={12} sm={12} md={12} container direction='columnn' justifyContent='center'>
-                  {comments?.map(comment => (
-                    <List key={comment.id} sx={{ width: '95%', maxWidth: 1180, bgcolor: '#1c1f26' }}>
-                      <Comments comment={comment} />
-                    </List>
-                  ))}
-                </Grid>
-              )}
-            </>
+            <Grid item xs={12} sm={12} md={12} container direction='columnn' justifyContent='center'>
+              {comments?.map(comment => (
+                <List key={comment.id} sx={{ width: '95%', maxWidth: 1180, bgcolor: '#1c1f26' }}>
+                  <Comments comment={comment} />
+                </List>
+              ))}
+            </Grid>
           )}
         </Card>
       )}

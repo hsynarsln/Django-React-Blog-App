@@ -74,7 +74,7 @@ export const addCommentAPI =
           }
         }
       );
-      // console.log(data);
+      console.log(data);
 
       dispatch({ type: ADD_COMMENT_SUCCESS, payload: data.data.message });
       successNote(data.data.message);
