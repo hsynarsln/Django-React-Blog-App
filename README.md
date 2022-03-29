@@ -79,6 +79,7 @@ $ npm start
 ## Contact
 
 - Email (hsyn06arslan@gmail.com)
+
 - GitHub (https://github.com/hsynarsln)
 
 - Linkedin (https://www.linkedin.com/in/huseyinarsln/)
